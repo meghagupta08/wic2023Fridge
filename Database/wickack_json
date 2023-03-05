@@ -1,0 +1,14 @@
+[
+    {
+        "itemid": 1,
+        "categoryid": 2,
+        "itemname": "Bread",
+        "itemexpiry": "2023-03-04"
+    },
+    {
+        "itemid": 2,
+        "categoryid": 1,
+        "itemname": "Milk",
+        "itemexpiry": "2023-03-06"
+    }
+]
