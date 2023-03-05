@@ -1,6 +1,12 @@
 package com.demo.wasteless.wickhackwasteless.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="items")
@@ -9,31 +15,38 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="itemid")
-    private int itemid;
+    private Integer itemid;
 
-    @Column(name="categoryid")
-    private int categoryid;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "categoryid")
+    private Category category;
 
     @Column(name="itemname")
     private String itemname;
 
     @Column(name="itemexpiry")
-    private String itemexpiry;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
+    private Timestamp itemexpiry;
 
-    public int getItemid() {
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    Set<UserItemList> users = new HashSet<>();
+
+    public Integer getItemid() {
         return itemid;
     }
 
-    public void setItemid(int itemid) {
+    public void setItemid(Integer itemid) {
         this.itemid = itemid;
     }
 
-    public int getCategoryid() {
-        return categoryid;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryid(int categoryid) {
-        this.categoryid = categoryid;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getItemname() {
@@ -44,21 +57,23 @@ public class Item {
         this.itemname = itemname;
     }
 
-    public String getItemexpiry() {
+    public Timestamp getItemexpiry() {
         return itemexpiry;
     }
 
-    public void setItemexpiry(String itemexpiry) {
+    public void setItemexpiry(Timestamp itemexpiry) {
         this.itemexpiry = itemexpiry;
     }
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "itemid=" + itemid +
-                ", categoryid=" + categoryid +
-                ", itemname='" + itemname + '\'' +
-                ", itemexpiry='" + itemexpiry + '\'' +
-                '}';
+    public Set<UserItemList> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserItemList> users) {
+        this.users = users;
+    }
+
+    public Item() {
+        //Default constructor
     }
 }
